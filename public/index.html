@@ -9,6 +9,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fatou Hair Braiding — South Shore, Chicago">
 <meta property="og:description" content="Knotless, box braids, Senegalese twists, cornrows, kids and men's braids. Open daily 8 AM–8 PM. Book online.">
+<meta property="og:image" content="assets/logo-mark-512-plum.png">
+<!-- SETUP: once the domain is live, make og:image an absolute URL (https://YOUR-DOMAIN/assets/...) and ideally a photo of a finished style, 1200x630. -->
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <!-- SETUP: when the domain is live, add <link rel="canonical" href="https://YOUR-DOMAIN/"> plus og:url and og:image. -->
 <style>
@@ -30,7 +32,8 @@
   header.top { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid var(--line); }
   .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
   .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
-  .brand img { height: 40px; width: auto; display: block; }
+  .brand img { height: 48px; width: auto; display: block; }
+  @media (max-width: 420px) { .brand img { height: 40px; } }
   .brand .txt { font-weight: 800; letter-spacing: .5px; color: var(--plum); font-size: 20px; line-height: 1.05; }
   .brand .txt small { display: block; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 600; }
   nav.links { display: flex; gap: 22px; align-items: center; }
@@ -357,6 +360,7 @@
     "addressCountry": "US"
   },
   "geo": { "@type": "GeoCoordinates", "latitude": 41.7650931, "longitude": -87.5766659 },
+  "logo": "assets/logo-mark-512-plum.png",
   "hasMap": "https://maps.google.com/?cid=3611925491046211763",
   "openingHoursSpecification": [{
     "@type": "OpeningHoursSpecification",
