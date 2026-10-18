@@ -180,6 +180,15 @@ section.alt{background:var(--cream);border-top:1px solid var(--line);border-bott
 .gallery figure{margin:0;position:relative;min-width:0}
 .gallery .shot{gap:8px;padding:12px}
 .gallery .shot img{height:46px}
+/* Interim Instagram embeds: every post sits in an identical frame (same width and height),
+   so rows line up evenly whatever the post's own shape. 3-up on desktop, a swipeable row on
+   phones (the row scrolls, never the page). */
+.ig-embeds{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ig-card{position:relative;aspect-ratio:5/8;overflow:hidden;background:var(--white);border:1px solid var(--line);border-radius:var(--r-sm)}
+.ig-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:44px;background:linear-gradient(rgba(255,255,255,0),var(--white));pointer-events:none}
+.ig-card .instagram-media,.ig-card iframe{margin:0!important;min-width:0!important;width:100%!important;max-width:100%!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+@media (max-width:900px){.ig-embeds{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+  .ig-card{flex:0 0 82%;scroll-snap-align:start}}
 /* Real photos from the nightly Instagram sync (scripts/instagram_sync.py). */
 .gallery .shot.ig{padding:0;display:block}
 .gallery .shot.ig img{width:100%;height:100%;object-fit:cover;opacity:1;display:block}
@@ -457,14 +466,17 @@ footer .fine a{color:#fff}
            Only post clients who said yes. 4:5 crop, under 120 KB each. -->
       <div class="gallery">
         <!-- IG-FEED:START -->
-        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Knotless</figcaption></figure>
-        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Box braids</figcaption></figure>
-        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Senegalese twists</figcaption></figure>
-        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Passion twists</figcaption></figure>
-        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Boho knotless</figcaption></figure>
-        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Cornrows</figcaption></figure>
-        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Stitch braids</figcaption></figure>
-        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Kids' braids</figcaption></figure>
+        <!-- Interim: official Instagram embeds of the 6 newest posts. The nightly sync
+             (scripts/instagram_sync.py) replaces everything between these markers with
+             fast photo tiles once IG_TOKEN is set up. -->
+        <div class="ig-embeds">
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DemuhReMzRH/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/DemuhReMzRH/" rel="noopener">View this post on Instagram</a></blockquote></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DehhTb3M9y5/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/DehhTb3M9y5/" rel="noopener">View this post on Instagram</a></blockquote></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DehejJ7OQ0h/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DehejJ7OQ0h/" rel="noopener">View this post on Instagram</a></blockquote></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/Dehasg0u5Xv/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/Dehasg0u5Xv/" rel="noopener">View this post on Instagram</a></blockquote></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeaKXUysRq3/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeaKXUysRq3/" rel="noopener">View this post on Instagram</a></blockquote></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeaEeWmMDty/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeaEeWmMDty/" rel="noopener">View this post on Instagram</a></blockquote></div>
+        </div>
         <!-- IG-FEED:END -->
       </div>
       <div class="ig-row">
@@ -785,6 +797,23 @@ footer .fine a{color:#fff}
   };
 
   document.getElementById("yr").textContent = new Date().getFullYear();
+
+  // Load Instagram's embed script only when the gallery is about to scroll into view.
+  (function () {
+    var g = document.querySelector(".ig-embeds");
+    if (!g) return;
+    function load() {
+      if (window.__igLoaded) return; window.__igLoaded = true;
+      var sc = document.createElement("script");
+      sc.async = true; sc.src = "https://www.instagram.com/embed.js";
+      document.body.appendChild(sc);
+    }
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { load(); io.disconnect(); } },
+        { rootMargin: "600px" });
+      io.observe(g);
+    } else { load(); }
+  })();
 
   // Tint today's row in the hours table, using the salon's own time zone (Chicago),
   // so it is right for every visitor. Runs on every page load, so it changes daily.
