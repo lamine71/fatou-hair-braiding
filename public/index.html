@@ -134,7 +134,9 @@ nav.links a:hover{color:var(--plum)}
 .hero-media .chip{position:absolute;left:-10px;bottom:18px;background:var(--white);border:1px solid var(--line);
   border-left:4px solid var(--gold);border-radius:var(--r-sm);box-shadow:var(--shadow);padding:10px 14px;font-size:14px;line-height:1.3;max-width:76%}
 .hero-media .chip strong{display:block;font-size:15px}
-@media (max-width:880px){.hero-media{display:none}}
+.hero-photo{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 30%;border-radius:var(--r);box-shadow:var(--shadow);background:var(--cream)}
+/* Phones: a shorter, square crop under the buttons, so Book stays near the top. */
+@media (max-width:880px){.hero-photo{aspect-ratio:1/1;object-position:50% 22%}.hero-media .chip{left:10px;bottom:12px}}
 
 /* ---------- photo placeholders (hero, gallery, reviews) ---------- */
 /* SETUP: every .shot is a tinted panel standing in for a real photo.
@@ -361,11 +363,11 @@ footer .fine a{color:#fff}
                 style="aspect-ratio:4/5;border-radius:14px;border:1px solid #e7e1d8;box-shadow:0 10px 30px rgba(67,32,95,.07)">
            4:5 portrait, finished knotless style, plain wall, daylight, under 120 KB. Not lazy-loaded. -->
       <div class="hero-media">
-        <div class="shot">
-          <img src="assets/logo-mark.svg" alt="" width="100" height="100">
-          <span class="cap">Hero photo goes here — 4:5 portrait, a finished knotless style, salon light, plain wall</span>
-          <span class="soon">Photo coming soon</span>
-        </div>
+        <img class="hero-photo" src="assets/photos/hero-1200.webp"
+             srcset="assets/photos/hero-720.webp 720w, assets/photos/hero-1200.webp 1200w"
+             sizes="(max-width: 880px) 92vw, 470px" width="1200" height="1500"
+             alt="Boho knotless braids with curly ends, done at Fatou Hair Braiding"
+             fetchpriority="high" decoding="async">
         <div class="chip"><strong>Open every day, 8 AM–8 PM</strong>Same-day times are often free</div>
       </div>
     </div>
