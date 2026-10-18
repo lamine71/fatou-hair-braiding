@@ -351,7 +351,7 @@ footer .fine a{color:#fff}
           <span class="cap">Hero photo goes here — 4:5 portrait, a finished knotless style, salon light, plain wall</span>
           <span class="soon">Photo coming soon</span>
         </div>
-        <div class="chip"><strong>Open today until 8 PM</strong>Same-day times are often free</div>
+        <div class="chip"><strong>Open every day, 8 AM–8 PM</strong>Same-day times are often free</div>
       </div>
     </div>
   </div>
@@ -776,8 +776,14 @@ footer .fine a{color:#fff}
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // Tint today's row in the hours table.
-  var row = document.querySelector('.hours tr[data-day="' + new Date().getDay() + '"]');
+  // Tint today's row in the hours table, using the salon's own time zone (Chicago),
+  // so it is right for every visitor. Runs on every page load, so it changes daily.
+  var day = new Date().getDay();
+  try {
+    var wd = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", weekday: "short" }).format(new Date());
+    day = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(wd);
+  } catch (e) {}
+  var row = document.querySelector('.hours tr[data-day="' + day + '"]');
   if (row) row.className = "today";
 
   if (CONFIG.googleAdsId) {
