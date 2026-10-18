@@ -180,6 +180,12 @@ section.alt{background:var(--cream);border-top:1px solid var(--line);border-bott
 .gallery figure{margin:0;position:relative;min-width:0}
 .gallery .shot{gap:8px;padding:12px}
 .gallery .shot img{height:46px}
+/* Real photos from the nightly Instagram sync (scripts/instagram_sync.py). */
+.gallery .shot.ig{padding:0;display:block}
+.gallery .shot.ig img{width:100%;height:100%;object-fit:cover;opacity:1;display:block}
+.gallery .shot.ig:hover img{transform:scale(1.03)}
+.gallery .shot.ig img{transition:transform .3s ease}
+@media (prefers-reduced-motion: reduce){.gallery .shot.ig img{transition:none}.gallery .shot.ig:hover img{transform:none}}
 .gallery figcaption{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.94);border-radius:999px;
   padding:5px 11px;font-size:13px;font-weight:700}
 .ig-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px}
@@ -441,13 +447,16 @@ footer .fine a{color:#fff}
         <div class="rule"></div>
         <p class="sub">Our own clients, our own photos — never stock pictures.</p>
       </div>
-      <!-- SETUP: swap each placeholder for a real photo, keeping the caption:
+      <!-- SETUP: the tiles between IG-FEED:START and IG-FEED:END are rewritten every night by
+           .github/workflows/instagram-sync.yml with the latest Instagram posts (see setup/instagram-sync.md).
+           Until the Instagram token is added, the placeholders below stay. To place photos by hand instead:
            <figure><img src="assets/photos/knotless-medium.webp" alt="Medium knotless braids, waist length"
                         loading="lazy" decoding="async" width="800" height="1000"
                         style="aspect-ratio:4/5;border-radius:10px;border:1px solid #e7e1d8;object-fit:cover">
              <figcaption>Knotless</figcaption></figure>
            Only post clients who said yes. 4:5 crop, under 120 KB each. -->
       <div class="gallery">
+        <!-- IG-FEED:START -->
         <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Knotless</figcaption></figure>
         <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Box braids</figcaption></figure>
         <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Senegalese twists</figcaption></figure>
@@ -456,6 +465,7 @@ footer .fine a{color:#fff}
         <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Cornrows</figcaption></figure>
         <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Stitch braids</figcaption></figure>
         <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Kids' braids</figcaption></figure>
+        <!-- IG-FEED:END -->
       </div>
       <div class="ig-row">
         <a class="btn btn-ghost btn-sm" href="https://www.instagram.com/fatouafricanhairbraiding/" rel="noopener">See more on Instagram</a>

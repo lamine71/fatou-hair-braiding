@@ -1,0 +1,75 @@
+# Nightly: pull the latest Instagram posts into the website gallery.
+# Setup steps for the owner: setup/instagram-sync.md
+name: Instagram sync
+
+on:
+  schedule:
+    - cron: "17 10 * * *"   # every day at 10:17 UTC (about 5 AM in Chicago)
+  workflow_dispatch:         # "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write            # to commit the refreshed gallery
+
+concurrency:
+  group: instagram-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HAS_TOKEN: ${{ secrets.IG_TOKEN != '' }}
+      HAS_PAT: ${{ secrets.SECRETS_PAT != '' }}
+    steps:
+      - name: Not set up yet
+        if: env.HAS_TOKEN != 'true'
+        run: echo "::notice::Add the IG_TOKEN secret to turn on the Instagram sync (see setup/instagram-sync.md)."
+
+      - uses: actions/checkout@v4
+        if: env.HAS_TOKEN == 'true'
+
+      - uses: actions/setup-python@v5
+        if: env.HAS_TOKEN == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Install image resizer
+        if: env.HAS_TOKEN == 'true'
+        run: pip install --quiet pillow
+
+      - name: Pull latest posts
+        if: env.HAS_TOKEN == 'true'
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+        run: python3 scripts/instagram_sync.py --refresh
+
+      - name: Commit if the gallery changed
+        if: env.HAS_TOKEN == 'true'
+        run: |
+          git config user.name "instagram-sync[bot]"
+          git config user.email "instagram-sync@users.noreply.github.com"
+          git add public/index.html public/assets/instagram
+          if git diff --cached --quiet; then
+            echo "No new posts."
+          else
+            git commit -m "Instagram sync: latest posts"
+            git push
+          fi
+
+      - name: Save the refreshed token (keeps the sync running without manual renewals)
+        if: env.HAS_TOKEN == 'true' && env.HAS_PAT == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.SECRETS_PAT }}
+        run: |
+          if [ -s "$RUNNER_TEMP/ig_new_token" ]; then
+            gh secret set IG_TOKEN --repo "$GITHUB_REPOSITORY" < "$RUNNER_TEMP/ig_new_token"
+            echo "IG_TOKEN updated."
+          fi
+          rm -f "$RUNNER_TEMP/ig_new_token"
+
+      - name: Renewal reminder
+        if: env.HAS_TOKEN == 'true' && env.HAS_PAT != 'true'
+        run: |
+          rm -f "$RUNNER_TEMP/ig_new_token"
+          echo "::notice::Without the optional SECRETS_PAT secret, paste a fresh IG_TOKEN about every 50 days (see setup/instagram-sync.md)."
