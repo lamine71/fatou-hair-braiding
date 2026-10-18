@@ -1,6 +1,6 @@
 # Fatou Hair Braiding: website
 
-The website for **Fatou Hair Braiding**, an African hair-braiding salon at 7124 S Jeffery Blvd, South Shore, Chicago.
+The website for **Fatou Hair Braiding**, an African hair-braiding salon at 7124 S Jeffery Blvd on Chicago's South Side.
 
 - **Live preview:** https://lamine71.github.io/fatou-hair-braiding/
 - Hosted free on GitHub Pages. Every change pushed to the `site` branch republishes it automatically.
