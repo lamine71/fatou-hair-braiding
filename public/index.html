@@ -14,338 +14,716 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <!-- SETUP: when the domain is live, add <link rel="canonical" href="https://YOUR-DOMAIN/"> plus og:url and og:image. -->
 <style>
-  :root {
-    --plum: #5b2a86; --plum-dark: #43205f; --gold: #d4a017; --ink: #1f2328;
-    --muted: #57606a; --cream: #faf6f0; --line: #e7e1d8; --white: #fff;
-    --radius: 12px; --max: 1080px;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: var(--ink); background: var(--white); line-height: 1.55; font-size: 17px; }
-  a { color: var(--plum); }
-  a:focus-visible, button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
-  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
-  .skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: #fff; padding: 8px 12px; z-index: 100; }
-  .skip:focus { left: 8px; top: 8px; }
+/* ============================================================
+   Fatou Hair Braiding — one-page site.
+   Self-contained: inline CSS, no web fonts, no third-party requests.
+   Requests: this file + 3 local SVGs (logo, mark, favicon).
+   Everything marked .ph (yellow highlight + dotted underline) or shown
+   as a tinted "Photo coming soon" panel is a PLACEHOLDER to replace
+   before the owner starts spending on ads.
+   ============================================================ */
+:root{
+  /* brand */
+  --plum:#5b2a86;        /* primary action, links, eyebrows   white on it 9.90:1 */
+  --plum-deep:#2a1340;   /* dark bands, footer                white on it 16.59:1 */
+  --plum-tint:#f4eefa;   /* hover wash */
+  --gold:#d4a017;        /* rules, frames, focus ring — NEVER text on light */
+  --gold-ink:#8a6508;    /* the only gold that may carry text on cream  4.94:1 */
+  --gold-tint:#fdf4dd;   /* badge fill with ink text */
+  --ink:#1f2328;         /* body text            14.67:1 on cream */
+  --muted:#57606a;       /* secondary text        5.93:1 on cream */
+  --cream:#faf6f0;       /* alt section band */
+  --line:#e7e1d8;        /* hairlines, card borders */
+  --white:#fff;
+  /* Type: body is the system sans at 0 KB. Headings use the display serif
+     stack below, which resolves to Georgia on every device we care about —
+     that is what ships today, and it costs nothing.
+     SETUP (optional): to match the wordmark exactly, drop a ~30 KB latin
+     subset of Playfair Display 600 into assets/ and uncomment this block
+     plus the matching <link rel="preload"> in <head>. One weight only.
+  @font-face{font-family:"Playfair Display";src:url(assets/playfair-600.woff2) format("woff2");
+    font-weight:600;font-style:normal;font-display:swap;
+    unicode-range:U+0000-00FF,U+2018,U+2019,U+201C,U+201D,U+2013,U+2014,U+2026}  */
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Playfair Display",ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
+  --r:14px; --r-sm:10px; --max:1120px;
+  --shadow:0 1px 2px rgba(31,35,40,.05),0 10px 30px rgba(67,32,95,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;font-family:var(--sans);font-size:17px;line-height:1.55;color:var(--ink);background:var(--white)}
+img{max-width:100%;display:block}
+a{color:var(--plum)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+.skip{position:absolute;left:-999px;background:var(--ink);color:#fff;padding:10px 14px;z-index:200}
+.skip:focus{left:8px;top:8px}
 
-  header.top { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid var(--line); }
-  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
-  .brand img { height: 48px; width: auto; display: block; }
-  @media (max-width: 420px) { .brand img { height: 40px; } }
-  .brand .txt { font-weight: 800; letter-spacing: .5px; color: var(--plum); font-size: 20px; line-height: 1.05; }
-  .brand .txt small { display: block; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 600; }
-  nav.links { display: flex; gap: 22px; align-items: center; }
-  nav.links a { text-decoration: none; color: var(--ink); font-weight: 600; font-size: 15px; }
-  nav.links a:hover { color: var(--plum); }
-  @media (max-width: 760px) { nav.links a:not(.btn) { display: none; } }
+/* ---------- type scale ---------- */
+h1,h2{font-family:var(--serif);font-weight:600;margin:0}
+h1{font-size:clamp(31px,7.2vw,46px);line-height:1.08;letter-spacing:-.01em}
+h2.sec{font-size:clamp(25px,4.4vw,34px);line-height:1.16;letter-spacing:-.005em}
+h3{margin:0;font-family:var(--sans);font-weight:700;font-size:18px;line-height:1.3;letter-spacing:-.005em}
+.eyebrow{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--plum);margin:0 0 8px}
+.lead{font-size:18px;line-height:1.5;color:#3a3f45;margin:12px 0 0;max-width:33em}
+.sub{color:var(--muted);margin:8px 0 26px;max-width:44em}
+.meta{font-size:14px;line-height:1.45;color:var(--muted)}
+.rule{width:56px;height:3px;background:var(--gold);border-radius:2px;margin:14px 0 0}
 
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 22px; border-radius: 999px; font-weight: 700; text-decoration: none; font-size: 16px; border: 2px solid transparent; cursor: pointer; }
-  .btn-primary { background: var(--plum); color: #fff !important; }
-  .btn-primary:hover { background: var(--plum-dark); }
-  .btn-ghost { background: transparent; color: var(--plum) !important; border-color: var(--plum); }
-  .btn-ghost:hover { background: #f4eefa; }
-  .btn-sm { padding: 9px 16px; font-size: 15px; }
+/* SETUP: .ph marks every value the owner still has to confirm — prices, times,
+   ages, payment methods, parking. It is deliberately loud. Delete the <span
+   class="ph"> wrapper (not just the text) once the real value is in. */
+.ph{background:#fff3c4;border-bottom:2px dotted var(--gold-ink);border-radius:3px;padding:0 4px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 
-  .hero { background: linear-gradient(160deg, var(--cream) 0%, #f3ecf9 100%); padding: 56px 0 48px; border-bottom: 1px solid var(--line); }
-  .hero .wrap { display: grid; grid-template-columns: 1.15fr .85fr; gap: 36px; align-items: center; }
-  @media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; } }
-  .eyebrow { text-transform: uppercase; letter-spacing: 2px; font-size: 13px; font-weight: 700; color: var(--plum); margin: 0 0 10px; }
-  h1 { font-size: clamp(32px, 5vw, 50px); line-height: 1.08; margin: 0 0 14px; letter-spacing: -.5px; }
-  .lead { font-size: 19px; color: #3a3f45; margin: 0 0 24px; max-width: 34em; }
-  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
-  .facts { display: flex; flex-wrap: wrap; gap: 10px 22px; padding: 0; margin: 0; list-style: none; color: #3a3f45; font-size: 15px; }
-  .facts li::before { content: "✓"; color: var(--plum); font-weight: 800; margin-right: 6px; }
-  .hero-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: 0 10px 30px rgba(67,32,95,.08); }
-  .hero-card h2 { font-size: 18px; margin: 0 0 12px; }
-  .hours-mini { width: 100%; border-collapse: collapse; font-size: 15px; }
-  .hours-mini td { padding: 6px 0; border-bottom: 1px dashed var(--line); }
-  .hours-mini td:last-child { text-align: right; font-weight: 600; }
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;padding:0 24px;
+  border-radius:999px;border:2px solid transparent;font:700 17px/1 var(--sans);letter-spacing:.01em;
+  text-decoration:none;cursor:pointer;transition:background .15s,border-color .15s,transform .05s}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--plum);color:#fff!important;box-shadow:0 6px 16px rgba(91,42,134,.25)}
+.btn-primary:hover{background:#4a2070}
+.btn-ghost{background:var(--white);color:var(--plum)!important;border-color:#9b79b8}
+.btn-ghost:hover{background:var(--plum-tint);border-color:var(--plum)}
+.btn-onDark{background:var(--white);color:var(--plum)!important}
+.btn-onDark:hover{background:var(--cream)}
+.btn-onDark-ghost{background:transparent;color:#fff!important;border-color:rgba(255,255,255,.55)}
+.btn-onDark-ghost:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+.btn-sm{min-height:42px;padding:0 18px;font-size:15.5px}
+.btn svg{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.9}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+@media (max-width:420px){.cta-row .btn{width:100%}}
 
-  section { padding: 56px 0; }
-  section.alt { background: var(--cream); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  h2.sec { font-size: clamp(26px, 3.4vw, 34px); margin: 0 0 8px; letter-spacing: -.3px; }
-  .sub { color: var(--muted); margin: 0 0 28px; }
+/* ---------- utility bar + header ---------- */
+.util{background:var(--plum-deep);color:#efe7f5;font-size:13.5px}
+.util .wrap{display:flex;gap:18px;align-items:center;justify-content:space-between;min-height:38px}
+.util a{color:#fff;text-decoration:none}
+.util a:hover{text-decoration:underline}
+.util .dot{color:var(--gold)}
+@media (max-width:860px){.util{display:none}}
+header.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.97);backdrop-filter:saturate(1.2) blur(6px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:66px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand .logo{height:48px;width:auto}
+@media (max-width:420px){.brand .logo{height:40px}}
+nav.links{display:flex;gap:24px;align-items:center}
+nav.links a{text-decoration:none;color:var(--ink);font-weight:600;font-size:15.5px}
+nav.links a:hover{color:var(--plum)}
+.icon-btn{display:none}
+@media (max-width:900px){
+  nav.links a:not(.btn):not(.icon-btn){display:none}
+  nav.links{gap:10px}
+  .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;
+    border:2px solid #9b79b8;color:var(--plum);text-decoration:none;flex:0 0 44px}
+  .icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9}
+}
+@media (max-width:400px){nav.links{gap:8px}.btn-sm{padding:0 14px}}
 
-  .price-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-  @media (max-width: 760px) { .price-grid { grid-template-columns: 1fr; } }
-  .price-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
-  .price-card h3 { margin: 0 0 10px; font-size: 19px; color: var(--plum); }
-  .price-card table { width: 100%; border-collapse: collapse; font-size: 16px; }
-  .price-card td { padding: 7px 0; border-bottom: 1px solid #f0ebe3; vertical-align: top; }
-  .price-card td.t { color: var(--muted); font-size: 14px; white-space: nowrap; padding-left: 8px; text-align: right; }
-  .price-card td.p { font-weight: 700; text-align: right; white-space: nowrap; padding-left: 10px; width: 1%; }
-  .note { font-size: 14px; color: var(--muted); }
-  /* SETUP: .ph highlights placeholder text. Remove the class once the real value is in. */
-  .ph { background: #fff3c4; border-radius: 4px; padding: 0 4px; }
+/* ---------- hero ---------- */
+.hero{background:linear-gradient(168deg,var(--cream) 0%,#f5eefb 62%,#efe4f8 100%);border-bottom:1px solid var(--line);padding:44px 0 40px}
+.hero .wrap{display:grid;grid-template-columns:1.06fr .94fr;gap:40px;align-items:center}
+@media (max-width:880px){.hero{padding:30px 0 28px}.hero .wrap{grid-template-columns:1fr;gap:26px}}
+.badge{display:inline-flex;align-items:center;gap:7px;background:var(--white);border:1px solid var(--line);
+  border-radius:999px;padding:7px 15px;font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:14px;box-shadow:0 1px 2px rgba(31,35,40,.05)}
+.badge svg{width:14px;height:14px;fill:var(--plum)}
+.trust{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0;padding:0;list-style:none}
+.trust li{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.75);border:1px solid var(--line);
+  border-radius:999px;padding:7px 13px;font-size:14.5px;font-weight:600}
+.trust svg{width:15px;height:15px;flex:0 0 15px;fill:none;stroke:var(--plum);stroke-width:2.4}
+.hero-media{position:relative;min-width:0}
+.hero-media .chip{position:absolute;left:-10px;bottom:18px;background:var(--white);border:1px solid var(--line);
+  border-left:4px solid var(--gold);border-radius:var(--r-sm);box-shadow:var(--shadow);padding:10px 14px;font-size:14px;line-height:1.3;max-width:76%}
+.hero-media .chip strong{display:block;font-size:15px}
+@media (max-width:880px){.hero-media{display:none}}
 
-  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  @media (max-width: 760px) { .gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
-  .gallery figure { margin: 0; aspect-ratio: 4 / 5; border-radius: var(--radius); overflow: hidden; position: relative; background: repeating-linear-gradient(135deg, #efe6f6 0 14px, #f7f1fb 14px 28px); border: 1px solid var(--line); }
-  .gallery figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .gallery figcaption { position: absolute; left: 10px; bottom: 10px; background: rgba(255,255,255,.92); padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }
-  .gallery .soon { position: absolute; inset: 0; display: grid; place-items: center; color: var(--plum); font-weight: 700; font-size: 14px; opacity: .7; }
+/* ---------- photo placeholders (hero, gallery, reviews) ---------- */
+/* SETUP: every .shot is a tinted panel standing in for a real photo.
+   Replace the whole <div class="shot"> … </div> with an <img>, keeping the
+   4:5 crop — see the per-section SETUP comments for the exact markup. */
+.shot{aspect-ratio:4/5;border-radius:var(--r-sm);border:1px solid var(--line);overflow:hidden;
+  background:linear-gradient(150deg,#efe4f8,#faf6f0 55%,#f6ead4);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:16px}
+.shot img{width:auto;opacity:.32}
+.shot .soon{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--plum);opacity:.8}
+.shot .cap{font-size:14px;font-weight:600;color:var(--plum);opacity:.8;max-width:22em;line-height:1.4}
+.hero-media .shot{border-radius:var(--r);box-shadow:var(--shadow);gap:14px;padding:24px}
+.hero-media .shot img{height:120px}
 
-  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; counter-reset: step; padding: 0; list-style: none; margin: 0; }
-  .steps li { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
-  .steps li::before { counter-increment: step; content: counter(step); display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--plum); color: #fff; font-weight: 800; margin-bottom: 10px; }
-  .steps strong { display: block; margin-bottom: 4px; }
+/* ---------- value strip ---------- */
+.strip{background:var(--white);border-bottom:1px solid var(--line);padding:26px 0}
+.strip ul{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:0;padding:0;list-style:none}
+.strip li{display:flex;gap:11px;align-items:flex-start;font-size:15.5px;line-height:1.35}
+.strip .ico{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:var(--gold-tint);display:grid;place-items:center}
+.strip .ico svg{width:19px;height:19px;fill:none;stroke:#7a5a06;stroke-width:2}
+.strip strong{display:block;font-size:15.5px}
+.strip span span{color:var(--muted);font-size:14px}
+@media (max-width:880px){.strip ul{grid-template-columns:1fr 1fr;gap:14px}}
+@media (max-width:460px){.strip ul{grid-template-columns:1fr}}
 
-  .policies { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-  .policy { border: 1px solid var(--line); border-left: 4px solid var(--gold); background: #fff; padding: 14px 16px; border-radius: 0 var(--radius) var(--radius) 0; }
-  .policy h3 { margin: 0 0 4px; font-size: 17px; }
-  .policy p { margin: 0; font-size: 15px; color: #3a3f45; }
+/* ---------- sections ---------- */
+section{padding:54px 0}
+section.alt{background:var(--cream);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sec-head{margin-bottom:28px}
 
-  .reviews { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+/* ---------- styles we do (no prices — Square owns those) ---------- */
+.style-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:26px 24px}
+.style-groups h3{color:var(--plum);padding-bottom:10px;border-bottom:2px solid var(--gold);display:inline-block}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0;list-style:none}
+.chips li{background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:15px;font-weight:600}
+.note-line{display:flex;gap:11px;align-items:flex-start;margin:26px 0 0;background:var(--gold-tint);
+  border:1px solid #efd9a0;border-radius:var(--r-sm);padding:14px 16px;font-size:15.5px;line-height:1.45}
+.note-line svg{width:20px;height:20px;flex:0 0 20px;margin-top:2px;fill:none;stroke:#7a5a06;stroke-width:2}
 
-  .visit { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-  @media (max-width: 760px) { .visit { grid-template-columns: 1fr; } }
-  .visit address { font-style: normal; font-size: 18px; line-height: 1.5; margin-bottom: 14px; }
-  .hours { width: 100%; border-collapse: collapse; }
-  .hours td { padding: 8px 0; border-bottom: 1px solid var(--line); }
-  .hours td:last-child { text-align: right; font-weight: 600; }
-  .social { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; font-weight: 600; }
+/* ---------- gallery ---------- */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:880px){.gallery{grid-template-columns:1fr 1fr;gap:10px}}
+.gallery figure{margin:0;position:relative;min-width:0}
+.gallery .shot{gap:8px;padding:12px}
+.gallery .shot img{height:46px}
+.gallery figcaption{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.94);border-radius:999px;
+  padding:5px 11px;font-size:13px;font-weight:700}
+.ig-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px}
 
-  details { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 10px; }
-  summary { font-weight: 700; cursor: pointer; }
-  details p { margin: 10px 0 2px; color: #3a3f45; }
+/* ---------- booking band ---------- */
+.band{background:var(--plum-deep);color:#fff;padding:40px 0}
+.band .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-content:space-between}
+.band h2{font-size:clamp(22px,3.4vw,30px);line-height:1.2;color:#fff;max-width:22em}
+.band p{margin:8px 0 0;color:#e3d7ef;font-size:16px;max-width:38em}
+.band .cta-row{margin-top:0}
 
-  footer { background: var(--ink); color: #d6d9dd; padding: 32px 0; font-size: 14px; }
-  footer a { color: #fff; }
-  footer .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+/* ---------- steps ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s;margin:0;padding:0;list-style:none}
+@media (max-width:880px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+.steps li{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.steps li::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:34px;height:34px;
+  border-radius:50%;background:var(--plum);color:#fff;font:700 17px/1 var(--sans);margin-bottom:12px}
+.steps strong{display:block;margin-bottom:4px;font-size:16.5px}
+.steps p{margin:0;font-size:15px;color:#3a3f45}
 
-  .mobile-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: none; gap: 8px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: #fff; border-top: 1px solid var(--line); box-shadow: 0 -6px 20px rgba(0,0,0,.06); }
-  .mobile-bar .btn { flex: 1; padding: 12px 10px; }
-  @media (max-width: 760px) { .mobile-bar { display: flex; } footer { padding-bottom: 110px; } }
+/* ---------- reviews ---------- */
+/* 3-up grid from 701px (works with 2, 3, 4, 5 or 6 cards); below that a
+   swipeable scroll-snap row, so extra reviews cost no vertical space on a
+   phone. The row scrolls inside itself — the page never scrolls sideways. */
+/* Centred wrapping row: a card is never wider than 371px, so two cards read as
+   an intentional pair rather than a stretched grid, and adding a 3rd, 4th or
+   6th card simply fills the row and keeps centring. Below ~740px the cards
+   wrap to one per row (stacked) with no media query needed. */
+.quotes{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin:0;padding:0;list-style:none}
+.quotes>.quote{flex:1 1 320px;max-width:371px}
+.quote{margin:0;background:var(--white);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.quote>.shot,.quote>img{width:100%;border:0;border-bottom:1px solid var(--line);border-radius:0}
+.quote>img{aspect-ratio:4/5;height:auto;object-fit:cover}
+.qbody{display:flex;flex-direction:column;gap:12px;flex:1;padding:16px 18px 18px}
+.quote blockquote{margin:0;font-size:16px;line-height:1.5}
+.quote blockquote p{margin:0}
+.who{margin:auto 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:5px;font-size:14.5px;color:var(--muted)}
+.who .nm{color:var(--ink);font-weight:700}
+.who .src{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.who .src svg{width:14px;height:14px;flex:0 0 14px;fill:none;stroke:currentColor;stroke-width:2}
+
+/* ---------- policies ---------- */
+.policies{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:16px}
+.policy{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--gold);
+  border-radius:0 var(--r-sm) var(--r-sm) 0;padding:15px 17px}
+.policy h3{font-size:16.5px;margin-bottom:4px}
+.policy p{margin:0;font-size:15px;color:#3a3f45}
+
+/* ---------- visit ---------- */
+.visit{display:grid;grid-template-columns:1.1fr 1fr;gap:34px}
+@media (max-width:880px){.visit{grid-template-columns:1fr;gap:26px}}
+.visit address{font-style:normal;font-size:18px;line-height:1.5}
+.hours{width:100%;border-collapse:collapse;font-size:16px}
+.hours caption{text-align:left}
+.hours td{padding:9px 0;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.hours tr.today td{background:var(--gold-tint)}
+.hours tr.today td:first-child::after{content:" (today)";color:var(--gold-ink);font-weight:700;font-size:13.5px}
+/* Real Google Maps embed. loading="lazy" keeps it out of the initial load —
+   it only fetches when the visitor scrolls near it.
+   .map-fallback sits BEHIND the iframe: if the embed is blocked (offline, a
+   tracking blocker, no WebGL) the visitor sees the address and a prompt to open
+   Maps instead of an empty rectangle. When the embed loads it covers this. */
+.map-embed{position:relative;display:block;width:100%;aspect-ratio:16/9;margin-top:16px;background:var(--cream);
+  border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.map-embed iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0}
+.map-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:18px;text-align:center;color:var(--plum);font-weight:700;font-size:15px;line-height:1.4}
+.map-fallback svg{width:28px;height:28px;fill:var(--plum)}
+@media (max-width:880px){.map-embed{aspect-ratio:4/3}}
+.map-dir{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-weight:700;font-size:15.5px}
+.social{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;font-weight:600}
+
+/* ---------- faq ---------- */
+details{background:var(--white);border:1px solid var(--line);border-radius:var(--r-sm);padding:0;margin-bottom:10px}
+summary{font-weight:700;cursor:pointer;padding:15px 18px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:700 22px/1 var(--sans);color:var(--plum)}
+details[open] summary::after{content:"–"}
+details .body{padding:0 18px 16px;color:#3a3f45;font-size:16px}
+
+/* ---------- footer ---------- */
+footer{background:var(--plum-deep);color:#ddd2ea;padding:38px 0 30px;font-size:14.5px}
+footer a{color:#fff}
+footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:26px}
+@media (max-width:760px){footer .cols{grid-template-columns:1fr;gap:22px}}
+footer .cols h3{color:#fff;font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+footer ul{margin:0;padding:0;list-style:none}
+footer li{margin-bottom:7px}
+footer .f-brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:14px}
+footer .f-brand .tile{width:46px;height:46px;flex:0 0 46px;border-radius:50%;background:var(--cream);display:grid;place-items:center}
+footer .f-brand .tile img{width:30px;height:30px}
+footer .f-brand .txt{color:#fff;font-family:var(--serif);font-weight:600;font-size:22px;line-height:1}
+footer .f-brand .txt small{display:block;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.18em;color:#c4b6d4;margin-top:4px}
+footer .f-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+footer .fine{border-top:1px solid rgba(255,255,255,.16);margin-top:26px;padding-top:16px;display:flex;
+  flex-wrap:wrap;gap:10px 18px;justify-content:space-between;font-size:13.5px;color:#c4b6d4}
+footer .fine a{color:#fff}
+
+/* ---------- sticky mobile CTA bar ---------- */
+.mobile-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;gap:8px;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.98);
+  border-top:1px solid var(--line);box-shadow:0 -6px 22px rgba(31,35,40,.1)}
+.mobile-bar .btn{flex:1;min-width:0;padding:0 10px;min-height:52px;font-size:16px}
+.mobile-bar .btn-primary{flex:1.4}
+@media (max-width:900px){.mobile-bar{display:flex}footer{padding-bottom:104px}}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
+<div class="util">
+  <div class="wrap">
+    <span>7124 S Jeffery Blvd, South Shore <span class="dot">·</span> Open every day, 8 AM–8 PM</span>
+    <span>Call <a href="tel:+17733635834">(773) 363-5834</a> <span class="dot">·</span> Call or text <a href="tel:+17735520782">(773) 552-0782</a></span>
+  </div>
+</div>
+
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="Fatou Hair Braiding, back to top">
-      <img src="assets/logo-horizontal.svg" alt="Fatou Hair Braiding" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <span class="txt" style="display:none">FATOU<small>HAIR BRAIDING</small></span>
+    <a class="brand" href="#top" aria-label="Fatou Hair Braiding — back to top">
+      <img class="logo" src="assets/logo-horizontal.svg" alt="Fatou Hair Braiding" width="594" height="232">
     </a>
     <nav class="links" aria-label="Main">
-      <a href="#prices">Prices</a>
-      <a href="#gallery">Styles</a>
-      <a href="#how">How booking works</a>
+      <a href="#styles">Styles</a>
+      <a href="#gallery">Our work</a>
+      <a href="#how">Booking</a>
       <a href="#visit">Visit</a>
+      <a class="icon-btn" href="tel:+17733635834" aria-label="Call (773) 363-5834">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h3l2 5-2.5 1.5a12 12 0 006 6L15 13l5 2v3a2 2 0 01-2.2 2A16 16 0 013 5.2A2 2 0 015 3z"/></svg>
+      </a>
       <a class="btn btn-primary btn-sm" data-book href="https://SQUARE-BOOKING-LINK.invalid">Book now</a>
     </nav>
   </div>
 </header>
 
 <main id="main">
+  <!-- ============ HERO ============ -->
   <div id="top" class="hero">
     <div class="wrap">
       <div>
-        <p class="eyebrow">South Shore · Chicago</p>
-        <h1>African hair braiding, booked in a minute.</h1>
-        <p class="lead">Knotless braids, box braids, Senegalese twists, cornrows, and kids' and men's braids. Pick your style and time online, pay a small deposit, and we'll remind you before your appointment.</p>
+        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6a2.5 2.5 0 010 5.5z"/></svg> South Shore · Chicago</span>
+        <h1>Knotless braids and twists, booked in about a minute.</h1>
+        <p class="lead">Knotless, box braids, Senegalese twists, cornrows, and kids' and men's braids at 7124 S Jeffery Blvd. Pick your style and time online, pay a small deposit, and we'll text you a reminder.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" data-book href="https://SQUARE-BOOKING-LINK.invalid">Book online</a>
-          <a class="btn btn-ghost" href="tel:+17733635834">Call (773) 363-5834</a>
+          <a class="btn btn-primary" data-book href="https://SQUARE-BOOKING-LINK.invalid">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+            See open times &amp; book</a>
+          <a class="btn btn-ghost" href="tel:+17733635834">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h3l2 5-2.5 1.5a12 12 0 006 6L15 13l5 2v3a2 2 0 01-2.2 2A16 16 0 013 5.2A2 2 0 015 3z"/></svg>
+            Call (773) 363-5834</a>
         </div>
-        <ul class="facts">
-          <li>Open every day, 8 AM–8 PM</li>
-          <li>Walk-ins welcome when a braider is free</li>
-          <li>Text and email reminders</li>
+        <ul class="trust">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l6 6L20 6"/></svg> Open every day, 8 AM–8 PM</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l6 6L20 6"/></svg> Deposit comes off your price</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l6 6L20 6"/></svg> Walk-ins when a braider is free</li>
         </ul>
       </div>
-      <aside class="hero-card" aria-label="Hours and location">
-        <h2>Open 7 days a week</h2>
-        <table class="hours-mini">
-          <tr><td>Monday – Friday</td><td>8:00 AM – 8:00 PM</td></tr>
-          <tr><td>Saturday</td><td>8:00 AM – 8:00 PM</td></tr>
-          <tr><td>Sunday</td><td>8:00 AM – 8:00 PM</td></tr>
-        </table>
-        <p style="margin:14px 0 4px"><strong>7124 S Jeffery Blvd</strong><br>Chicago, IL 60649</p>
-        <p style="margin:0"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=Fatou+Hair+Braiding&amp;destination_place_id=ChIJ4x3ue1coDogRs-D86BgjIDI" rel="noopener">Get directions →</a></p>
-      </aside>
+      <!-- SETUP: hero photo. Replace the whole <div class="shot"> with:
+           <img src="assets/photos/hero-knotless.webp" width="1000" height="1250" fetchpriority="high"
+                alt="Medium knotless braids, waist length, finished in the salon"
+                style="aspect-ratio:4/5;border-radius:14px;border:1px solid #e7e1d8;box-shadow:0 10px 30px rgba(67,32,95,.07)">
+           4:5 portrait, finished knotless style, plain wall, daylight, under 120 KB. Not lazy-loaded. -->
+      <div class="hero-media">
+        <div class="shot">
+          <img src="assets/logo-mark.svg" alt="" width="100" height="100">
+          <span class="cap">Hero photo goes here — 4:5 portrait, a finished knotless style, salon light, plain wall</span>
+          <span class="soon">Photo coming soon</span>
+        </div>
+        <div class="chip"><strong>Open today until 8 PM</strong>Same-day times are often free</div>
+      </div>
     </div>
   </div>
 
-  <section id="prices">
+  <!-- ============ VALUE STRIP ============ -->
+  <div class="strip">
     <div class="wrap">
-      <h2 class="sec">Styles &amp; prices</h2>
-      <p class="sub">Starting prices. The final price depends on length and size. <span class="ph">Hair included: [yes / no / some styles]</span></p>
-      <div class="price-grid">
-        <div class="price-card">
-          <h3>Knotless braids</h3>
-          <table>
-            <tr><td>Small</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Medium</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Large</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Jumbo</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Boho knotless</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-          </table>
+      <ul>
+        <li><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></span>
+          <span><strong>Book online, day or night</strong><span>No phone tag, no waiting on a reply</span></span></li>
+        <li><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></span>
+          <span><strong>A time slot, not a queue</strong><span>Your deposit holds the time you picked</span></span></li>
+        <li><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z"/></svg></span>
+          <span><strong>Gentle on your scalp</strong><span>Ask for lighter tension in the booking notes</span></span></li>
+        <li><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M17 11.5a2.6 2.6 0 100-5.2M18 20c0-2.2-.8-3.9-2.2-5"/></svg></span>
+          <span><strong>Women, men and kids</strong><span>Quick cornrows and short styles too</span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ STYLES WE DO ============ -->
+  <!-- SETUP: there are deliberately NO prices or durations on this page.
+       Square Appointments is the single source of truth for both, so nothing
+       here can go stale or contradict the booking page. When you add, rename or
+       retire a service in Square, update the chip list below to match — that is
+       the only maintenance this section needs. -->
+  <section id="styles">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Styles we do</p>
+        <h2 class="sec">Braids, twists and cornrows for the whole family</h2>
+        <div class="rule"></div>
+        <p class="sub">Prices depend on length and size. See current prices and open times when you book.</p>
+      </div>
+      <div class="style-groups">
+        <div>
+          <h3>Knotless</h3>
+          <ul class="chips">
+            <li>Small</li>
+            <li>Medium</li>
+            <li>Large</li>
+            <li>Jumbo</li>
+            <li>Boho knotless</li>
+          </ul>
         </div>
-        <div class="price-card">
+        <div>
           <h3>Box braids &amp; twists</h3>
-          <table>
-            <tr><td>Box braids</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Senegalese twists</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Passion / spring twists</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Locs touch-up</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-          </table>
+          <ul class="chips">
+            <li>Box braids</li>
+            <li>Senegalese twists</li>
+            <li>Passion / spring twists</li>
+            <li>Locs touch-up</li>
+          </ul>
         </div>
-        <div class="price-card">
+        <div>
           <h3>Cornrows</h3>
-          <table>
-            <tr><td>Straight-back cornrows</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Stitch braids</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Feed-in ponytail</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-          </table>
+          <ul class="chips">
+            <li>Straight-back</li>
+            <li>Stitch braids</li>
+            <li>Feed-in ponytail</li>
+          </ul>
         </div>
-        <div class="price-card">
+        <div>
           <h3>Kids &amp; men</h3>
-          <table>
-            <tr><td>Kids' braids (ages <span class="ph">_–_</span>)</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Kids' knotless</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Men's braids</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-            <tr><td>Men's twists</td><td class="t"><span class="ph">_ h</span></td><td class="p"><span class="ph">$___</span></td></tr>
-          </table>
+          <ul class="chips">
+            <li>Kids' braids</li>
+            <li>Kids' knotless</li>
+            <li>Men's braids</li>
+            <li>Men's twists</li>
+          </ul>
         </div>
       </div>
-      <p class="note" style="margin-top:16px">A deposit holds your spot: <strong>$50</strong> for styles over 3 hours, <strong>$30</strong> for shorter styles. It comes off your final price.</p>
-      <p style="margin-top:18px"><a class="btn btn-primary" data-book href="https://SQUARE-BOOKING-LINK.invalid">See open times &amp; book</a></p>
+      <p class="note-line">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        <span>Every style is bookable online, every day of the week. Pick the style and the time, and the price and length show before you confirm.</span>
+      </p>
+      <div class="cta-row"><a class="btn btn-primary" data-book href="https://SQUARE-BOOKING-LINK.invalid">See prices &amp; open times</a></div>
     </div>
   </section>
 
+  <!-- ============ GALLERY ============ -->
   <section id="gallery" class="alt">
     <div class="wrap">
-      <h2 class="sec">Recent styles</h2>
-      <p class="sub">See more on Instagram: <a href="https://www.instagram.com/fatouafricanhairbraiding/" rel="noopener">@fatouafricanhairbraiding</a></p>
-      <!-- SETUP: swap each placeholder figure for
-           <figure><img src="assets/photos/NAME.webp" alt="Medium knotless braids, waist length" loading="lazy" width="800" height="1000"><figcaption>Knotless</figcaption></figure>
-           Only post clients who said yes. Keep each photo under ~150 KB. -->
+      <div class="sec-head">
+        <p class="eyebrow">Our work</p>
+        <h2 class="sec">Recent styles from this chair</h2>
+        <div class="rule"></div>
+        <p class="sub">Our own clients, our own photos — never stock pictures.</p>
+      </div>
+      <!-- SETUP: swap each placeholder for a real photo, keeping the caption:
+           <figure><img src="assets/photos/knotless-medium.webp" alt="Medium knotless braids, waist length"
+                        loading="lazy" decoding="async" width="800" height="1000"
+                        style="aspect-ratio:4/5;border-radius:10px;border:1px solid #e7e1d8;object-fit:cover">
+             <figcaption>Knotless</figcaption></figure>
+           Only post clients who said yes. 4:5 crop, under 120 KB each. -->
       <div class="gallery">
-        <figure><span class="soon">Photo coming soon</span><figcaption>Knotless</figcaption></figure>
-        <figure><span class="soon">Photo coming soon</span><figcaption>Box braids</figcaption></figure>
-        <figure><span class="soon">Photo coming soon</span><figcaption>Senegalese twists</figcaption></figure>
-        <figure><span class="soon">Photo coming soon</span><figcaption>Boho knotless</figcaption></figure>
-        <figure><span class="soon">Photo coming soon</span><figcaption>Cornrows</figcaption></figure>
-        <figure><span class="soon">Photo coming soon</span><figcaption>Kids' braids</figcaption></figure>
+        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Knotless</figcaption></figure>
+        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Box braids</figcaption></figure>
+        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Senegalese twists</figcaption></figure>
+        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Boho knotless</figcaption></figure>
+        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Cornrows</figcaption></figure>
+        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Stitch braids</figcaption></figure>
+        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Kids' braids</figcaption></figure>
+        <figure><div class="shot"><img src="assets/logo-mark.svg" alt="" width="100" height="100"><span class="soon">Photo coming soon</span></div><figcaption>Men's braids</figcaption></figure>
+      </div>
+      <div class="ig-row">
+        <a class="btn btn-ghost btn-sm" href="https://www.instagram.com/fatouafricanhairbraiding/" rel="noopener">See more on Instagram</a>
+        <a class="btn btn-ghost btn-sm" href="https://www.tiktok.com/@fatou.hair.braids8" rel="noopener">TikTok</a>
+        <span class="meta">@fatouafricanhairbraiding</span>
       </div>
     </div>
   </section>
 
+  <!-- ============ BOOKING BAND ============ -->
+  <div class="band">
+    <div class="wrap">
+      <div>
+        <h2>Ready to book your next style?</h2>
+        <p>Pick a style and a time in a couple of taps. A deposit holds your spot, and it comes off your final price.</p>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-onDark" data-book href="https://SQUARE-BOOKING-LINK.invalid">Book online</a>
+        <a class="btn btn-onDark-ghost" href="tel:+17733635834">Call (773) 363-5834</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HOW BOOKING WORKS ============ -->
   <section id="how">
     <div class="wrap">
-      <h2 class="sec">How booking works</h2>
-      <p class="sub">No back-and-forth messages. Book any time, day or night.</p>
+      <div class="sec-head">
+        <p class="eyebrow">How booking works</p>
+        <h2 class="sec">Four steps, no back-and-forth</h2>
+        <div class="rule"></div>
+      </div>
       <ol class="steps">
-        <li><strong>Pick your style and time</strong>See open times for today and the coming weeks.</li>
-        <li><strong>Pay a small deposit</strong>$30–$50 holds your spot and comes off your final price.</li>
-        <li><strong>Get a reminder</strong>We text and email you before your appointment. Reply to confirm or reschedule.</li>
-        <li><strong>Come ready</strong>Hair washed, detangled and stretched, so we can start on time.</li>
+        <li><strong>Pick style &amp; time</strong><p>Open times for today and the coming weeks, day or night. Not sure what the style is called? Send or bring a photo of it.</p></li>
+        <li><strong>Pay a small deposit</strong><p>It holds your spot and comes off your final price. The amount shows before you pay.</p></li>
+        <li><strong>Get a reminder</strong><p>We text and email before your appointment — reply to reschedule.</p></li>
+        <li><strong>Come ready</strong><p>Hair washed, detangled and stretched, so we can start on time.</p></li>
       </ol>
     </div>
   </section>
 
-  <section id="policies" class="alt">
-    <div class="wrap">
-      <h2 class="sec">Good to know</h2>
-      <div class="policies">
-        <div class="policy"><h3>Deposit</h3><p>$50 for styles over 3 hours, $30 for shorter styles. It comes off your final price.</p></div>
-        <div class="policy"><h3>Cancel or reschedule</h3><p>Give at least 24 hours' notice and your deposit carries over to your new time. With less notice, the deposit is kept.</p></div>
-        <div class="policy"><h3>Running late</h3><p>Please let us know. After 15 minutes we may need to move your appointment.</p></div>
-        <div class="policy"><h3>Walk-ins</h3><p>Welcome when a braider is free. Booking online guarantees your time.</p></div>
-        <div class="policy"><h3>Payment</h3><p><span class="ph">[Card, cash, Zelle — confirm]</span></p></div>
-      </div>
-    </div>
-  </section>
+  <!-- ============ REVIEWS ============ -->
+  <!-- SETUP — adding a review. Newest review goes FIRST. The row centres itself
+       and a card is capped at 371px, so 2 cards read as a pair and 3, 4 or 6
+       fill the row just as well; on a phone they stack one per row. Copy this
+       template and fill the four marked spots:
 
-  <section id="reviews">
+       <figure class="quote">
+         <img src="assets/reviews/FIRSTNAME.webp" alt="Medium knotless braids, waist length"
+              loading="lazy" decoding="async" width="800" height="1000">
+         <figcaption class="qbody">
+           <blockquote><p>&ldquo;the review, word for word&rdquo;</p></blockquote>
+           <p class="who">
+             <span class="nm">First name</span>
+             <span>Month year</span>
+             <span class="src"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 01-12.2 7.7L4 20.5l1.4-4.6A8.5 8.5 0 1121 11.5z"/></svg> Google review</span>
+           </p>
+         </figcaption>
+       </figure>
+
+       Photo: the finished style, 4:5 portrait, 800x1000, under ~150 KB, saved as
+       assets/reviews/FIRSTNAME.webp. A review photo goes online ONLY with that
+       client's permission — never a reviewer's Google profile picture and never
+       a photo someone else attached to a review.
+       Text: quote word for word, including the client's own spelling. First name
+       only, plus the month and year the review was left. Never write a name, a
+       date or a quote you cannot see on the Google listing.
+       No star rating and no review count anywhere on this page while the Google
+       average is below 4.2 — the two buttons let a visitor check for herself.
+
+       The two cards below are real Google reviews, newest first. The photos are
+       not in hand yet, so each card keeps a placeholder photo slot — drop the
+       files in as assets/reviews/suekwora.webp and assets/reviews/alyasa.webp,
+       each with that client's permission, and replace the <div class="shot">
+       with the <img> from the template above. -->
+  <section id="reviews" class="alt">
     <div class="wrap">
-      <h2 class="sec">Reviews</h2>
-      <p class="sub">Read what clients say on Google, and tell us how we did after your visit.</p>
-      <div class="reviews">
+      <div class="sec-head">
+        <p class="eyebrow">Reviews</p>
+        <h2 class="sec">In our clients' own words</h2>
+        <div class="rule"></div>
+        <p class="sub">Quoted word for word from our Google reviews, spelling and all. Read every review for yourself — the good and the bad — with the buttons below.</p>
+      </div>
+      <div class="quotes">
+        <figure class="quote">
+          <!-- SETUP: photo slot — assets/reviews/suekwora.webp, with her permission -->
+          <div class="shot">
+            <img src="assets/logo-mark.svg" alt="" width="100" height="100">
+            <span class="soon">Photo coming soon</span>
+          </div>
+          <figcaption class="qbody">
+            <blockquote><p>&ldquo;Show a picture of the style you want and you will be matched with the braider who can get you right.&rdquo;</p></blockquote>
+            <p class="who">
+              <span class="nm">Suekwora L.</span>
+              <span>October 2026</span>
+              <span class="src"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 01-12.2 7.7L4 20.5l1.4-4.6A8.5 8.5 0 1121 11.5z"/></svg> Google review</span>
+            </p>
+          </figcaption>
+        </figure>
+        <figure class="quote">
+          <!-- SETUP: photo slot — assets/reviews/alyasa.webp, with her permission -->
+          <div class="shot">
+            <img src="assets/logo-mark.svg" alt="" width="100" height="100">
+            <span class="soon">Photo coming soon</span>
+          </div>
+          <figcaption class="qbody">
+            <blockquote><p>&ldquo;Very comfortable very nice people been coming to this African braiding shop for over 20 years work is awesome and they always available even if it last min&rdquo;</p></blockquote>
+            <p class="who">
+              <span class="nm">Alyasa B.</span>
+              <span>October 2026</span>
+              <span class="src"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 01-12.2 7.7L4 20.5l1.4-4.6A8.5 8.5 0 1121 11.5z"/></svg> Google review</span>
+            </p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="cta-row">
         <a class="btn btn-ghost" href="https://maps.google.com/?cid=3611925491046211763" rel="noopener">Read our Google reviews</a>
         <a class="btn btn-ghost" href="https://search.google.com/local/writereview?placeid=ChIJ4x3ue1coDogRs-D86BgjIDI" rel="noopener">Leave a review</a>
       </div>
     </div>
   </section>
 
-  <section id="visit" class="alt">
-    <div class="wrap visit">
-      <div>
-        <h2 class="sec">Visit us</h2>
-        <address>
-          <strong>Fatou Hair Braiding</strong><br>
-          7124 S Jeffery Blvd<br>
-          Chicago, IL 60649
-        </address>
-        <p>
-          <a href="tel:+17733635834">(773) 363-5834</a><br>
-          <a href="tel:+17735520782">(773) 552-0782</a>
-        </p>
-        <p class="note"><span class="ph">[Parking or transit tip, e.g. street parking on Jeffery]</span></p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=Fatou+Hair+Braiding&amp;destination_place_id=ChIJ4x3ue1coDogRs-D86BgjIDI" rel="noopener">Get directions</a>
-          <a class="btn btn-ghost" data-book href="https://SQUARE-BOOKING-LINK.invalid">Book online</a>
-        </div>
-        <div class="social">
-          <a href="https://www.instagram.com/fatouafricanhairbraiding/" rel="noopener">Instagram</a>
-          <a href="https://www.tiktok.com/@fatou.hair.braids8" rel="noopener">TikTok</a>
-          <!-- SETUP: add the Facebook Page link when it exists
-          <a href="https://www.facebook.com/FACEBOOK-PAGE" rel="noopener">Facebook</a>
-          -->
-          <a href="https://maps.google.com/?cid=3611925491046211763" rel="noopener">Google</a>
-        </div>
+  <!-- ============ GOOD TO KNOW ============ -->
+  <section id="policies">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Good to know</p>
+        <h2 class="sec">Before your appointment</h2>
+        <div class="rule"></div>
       </div>
-      <div>
-        <h2 class="sec">Hours</h2>
-        <table class="hours">
-          <tr><td>Monday</td><td>8:00 AM – 8:00 PM</td></tr>
-          <tr><td>Tuesday</td><td>8:00 AM – 8:00 PM</td></tr>
-          <tr><td>Wednesday</td><td>8:00 AM – 8:00 PM</td></tr>
-          <tr><td>Thursday</td><td>8:00 AM – 8:00 PM</td></tr>
-          <tr><td>Friday</td><td>8:00 AM – 8:00 PM</td></tr>
-          <tr><td>Saturday</td><td>8:00 AM – 8:00 PM</td></tr>
-          <tr><td>Sunday</td><td>8:00 AM – 8:00 PM</td></tr>
-        </table>
+      <div class="policies">
+        <div class="policy"><h3>Deposit</h3><p>$50 for styles over 3 hours, $30 for shorter styles. It comes off your final price.</p></div>
+        <div class="policy"><h3>Cancel or reschedule</h3><p>Give at least 24 hours' notice and your deposit carries over to your new time. With less notice, the deposit is kept.</p></div>
+        <div class="policy"><h3>Running late</h3><p>Please let us know. After 15 minutes we may have to move your appointment.</p></div>
+        <div class="policy"><h3>Walk-ins</h3><p>Welcome whenever a braider is free. Booking online guarantees your time.</p></div>
+        <div class="policy"><h3>Payment</h3><p><span class="ph">Card, cash, Zelle — confirm</span></p></div>
+        <div class="policy"><h3>Your braider</h3><p>You book a style and a time, and the next available braider takes care of you.</p></div>
       </div>
     </div>
   </section>
 
+  <!-- ============ VISIT ============ -->
+  <section id="visit" class="alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Visit us</p>
+        <h2 class="sec">7124 S Jeffery Blvd, South Shore</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="visit">
+        <div>
+          <address>
+            <strong>Fatou Hair Braiding</strong><br>
+            7124 S Jeffery Blvd<br>
+            Chicago, IL 60649
+          </address>
+          <p style="margin:12px 0 0">
+            Call <a href="tel:+17733635834">(773) 363-5834</a><br>
+            Call or text <a href="tel:+17735520782">(773) 552-0782</a> · <a href="sms:+17735520782">send a text</a>
+          </p>
+          <p class="meta" style="margin-top:12px"><span class="ph">Parking or transit tip — e.g. street parking on Jeffery, nearest bus — confirm</span></p>
+          <!-- SETUP: Optional: replace src with the official embed code from
+               Google Maps → Share → Embed a map. Keep loading="lazy" and keep
+               the directions link below it for one-tap directions on a phone. -->
+          <div class="map-embed">
+            <span class="map-fallback" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6a2.5 2.5 0 010 5.5z"/></svg>
+              7124 S Jeffery Blvd, Chicago<br>Open in Google Maps with the link below
+            </span>
+            <iframe src="https://www.google.com/maps?q=Fatou+Hair+Braiding,+7124+S+Jeffery+Blvd,+Chicago,+IL+60649&amp;z=16&amp;output=embed"
+                    title="Map: Fatou Hair Braiding, 7124 S Jeffery Blvd" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade" width="600" height="400" style="border:0" allowfullscreen></iframe>
+          </div>
+          <p style="margin:0">
+            <a class="map-dir" href="https://www.google.com/maps/dir/?api=1&amp;destination=Fatou+Hair+Braiding&amp;destination_place_id=ChIJ4x3ue1coDogRs-D86BgjIDI" rel="noopener">Get directions on Google Maps <span aria-hidden="true">→</span></a>
+          </p>
+          <div class="social">
+            <a href="https://www.instagram.com/fatouafricanhairbraiding/" rel="noopener">Instagram</a>
+            <a href="https://www.tiktok.com/@fatou.hair.braids8" rel="noopener">TikTok</a>
+            <!-- SETUP: add the Facebook Page link when it exists
+            <a href="https://www.facebook.com/FACEBOOK-PAGE" rel="noopener">Facebook</a>
+            -->
+            <a href="https://maps.google.com/?cid=3611925491046211763" rel="noopener">Google profile</a>
+          </div>
+        </div>
+        <div>
+          <table class="hours">
+            <caption class="eyebrow">Hours</caption>
+            <tbody>
+              <tr data-day="1"><td>Monday</td><td>8:00 AM – 8:00 PM</td></tr>
+              <tr data-day="2"><td>Tuesday</td><td>8:00 AM – 8:00 PM</td></tr>
+              <tr data-day="3"><td>Wednesday</td><td>8:00 AM – 8:00 PM</td></tr>
+              <tr data-day="4"><td>Thursday</td><td>8:00 AM – 8:00 PM</td></tr>
+              <tr data-day="5"><td>Friday</td><td>8:00 AM – 8:00 PM</td></tr>
+              <tr data-day="6"><td>Saturday</td><td>8:00 AM – 8:00 PM</td></tr>
+              <tr data-day="0"><td>Sunday</td><td>8:00 AM – 8:00 PM</td></tr>
+            </tbody>
+          </table>
+          <div class="cta-row">
+            <a class="btn btn-primary" data-book href="https://SQUARE-BOOKING-LINK.invalid">Book online</a>
+            <a class="btn btn-ghost" href="tel:+17733635834">Call us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
   <section id="faq">
     <div class="wrap">
-      <h2 class="sec">Questions</h2>
-      <details><summary>How should I come prepared?</summary><p>Come with your hair washed, fully detangled and stretched (blow-dried), with no product build-up. That lets us start on time.</p></details>
-      <details><summary>Is braiding hair included?</summary><p><span class="ph">[Yes for all styles / yes for some styles / bring your own — confirm]</span></p></details>
-      <details><summary>How long will my appointment take?</summary><p>Each style shows its usual time when you book. Long styles like small knotless can take 5 hours or more.</p></details>
-      <details><summary>Do you braid kids' hair?</summary><p>Yes, for ages <span class="ph">[_]</span> and up. A parent or guardian should stay for children under <span class="ph">[_]</span>.</p></details>
-      <details><summary>Can I choose a braider?</summary><p>Book the style and time that work for you, and the next available braider will take care of you. If you have a sensitive scalp or want lighter tension, say so in the booking notes.</p></details>
-      <details><summary>Can I walk in?</summary><p>Yes, when a braider is free. Booking online guarantees your time.</p></details>
+      <div class="sec-head">
+        <p class="eyebrow">Questions</p>
+        <h2 class="sec">Asked and answered</h2>
+        <div class="rule"></div>
+      </div>
+      <details><summary>How should I come prepared?</summary><div class="body">Come with your hair washed, fully detangled and stretched (blow-dried), with no product build-up. That lets us start on time.</div></details>
+      <details><summary>Is braiding hair included?</summary><div class="body"><span class="ph">Included / not included / included on some styles — confirm which.</span></div></details>
+      <details><summary>How long will my appointment take?</summary><div class="body">Each style shows its usual time when you book. Long styles like small knotless can run 5 hours or more.</div></details>
+      <details><summary>Can I request a specific braider?</summary><div class="body">You book the style and time that work for you, and the next available braider takes care of you. Send or bring a photo of the style you want, and we'll match you with the braider who does it best. If you have a sensitive scalp or want lighter tension, say so in the booking notes.</div></details>
+      <details><summary>Do you braid kids' hair?</summary><div class="body">Yes, from age <span class="ph">_</span>. A parent or guardian stays with children under <span class="ph">_</span>.</div></details>
+      <details><summary>Can I walk in?</summary><div class="body">Yes, whenever a braider is free. Booking online guarantees your time.</div></details>
+      <details><summary>How do I pay?</summary><div class="body"><span class="ph">Card, cash, Zelle — confirm</span>. The deposit is paid online when you book, and it comes off your final price.</div></details>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <div class="row">
+    <div class="cols">
       <div>
-        <strong style="color:#fff">Fatou Hair Braiding</strong><br>
-        7124 S Jeffery Blvd, Chicago, IL 60649<br>
-        <a href="tel:+17733635834">(773) 363-5834</a> · <a href="tel:+17735520782">(773) 552-0782</a><br>
-        Illinois salon registration #189022344
+        <a class="f-brand" href="#top" aria-label="Fatou Hair Braiding — back to top">
+          <span class="tile"><img src="assets/logo-mark.svg" alt="" width="100" height="100"></span>
+          <span class="txt">Fatou<small>HAIR BRAIDING</small></span>
+        </a>
+        <p style="margin:0;max-width:30em">African hair braiding in South Shore, Chicago. Knotless, box braids, twists, cornrows, and kids' and men's braids — open every day.</p>
       </div>
       <div>
-        <a href="privacy.html">Privacy</a> · <a href="https://www.instagram.com/fatouafricanhairbraiding/" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@fatou.hair.braids8" rel="noopener">TikTok</a><br>
-        © <span id="yr">2026</span> Fatou Hair Braiding
+        <h3>Visit</h3>
+        <ul>
+          <li>7124 S Jeffery Blvd<br>Chicago, IL 60649</li>
+          <li>Call <a href="tel:+17733635834">(773) 363-5834</a></li>
+          <li>Call or text <a href="tel:+17735520782">(773) 552-0782</a></li>
+          <li>Open daily, 8 AM – 8 PM</li>
+        </ul>
       </div>
+      <div>
+        <h3>Book</h3>
+        <ul>
+          <li><a data-book href="https://SQUARE-BOOKING-LINK.invalid">Book online</a></li>
+          <li><a href="#styles">Styles we do</a></li>
+          <li><a href="https://www.instagram.com/fatouafricanhairbraiding/" rel="noopener">Instagram</a></li>
+          <li><a href="https://maps.google.com/?cid=3611925491046211763" rel="noopener">Google reviews</a></li>
+        </ul>
+        <div class="f-cta">
+          <a class="btn btn-onDark btn-sm" data-book href="https://SQUARE-BOOKING-LINK.invalid">Book now</a>
+          <a class="btn btn-onDark-ghost btn-sm" href="tel:+17733635834">Call us</a>
+        </div>
+      </div>
+    </div>
+    <div class="fine">
+      <span>Illinois salon registration #189022344</span>
+      <span>© <span id="yr">2026</span> Fatou Hair Braiding · <a href="privacy.html">Privacy</a></span>
     </div>
   </div>
 </footer>
 
 <div class="mobile-bar" role="region" aria-label="Quick actions">
-  <a class="btn btn-ghost" href="tel:+17733635834">Call</a>
-  <!-- SETUP: if (773) 552-0782 can receive texts, add: <a class="btn btn-ghost" href="sms:+17735520782">Text</a> -->
+  <a class="btn btn-ghost" href="tel:+17733635834" aria-label="Call (773) 363-5834">Call</a>
+  <a class="btn btn-ghost" href="sms:+17735520782" aria-label="Text (773) 552-0782">Text</a>
   <a class="btn btn-primary" data-book href="https://SQUARE-BOOKING-LINK.invalid">Book now</a>
 </div>
 
@@ -397,6 +775,10 @@
   };
 
   document.getElementById("yr").textContent = new Date().getFullYear();
+
+  // Tint today's row in the hours table.
+  var row = document.querySelector('.hours tr[data-day="' + new Date().getDay() + '"]');
+  if (row) row.className = "today";
 
   if (CONFIG.googleAdsId) {
     var g = document.createElement("script");
