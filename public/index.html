@@ -183,6 +183,9 @@ section.alt{background:var(--cream);border-top:1px solid var(--line);border-bott
 .style-groups h3{color:var(--plum);padding-bottom:10px;border-bottom:2px solid var(--gold);display:inline-block}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0;list-style:none}
 .chips li{background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:15px;font-weight:600}
+/* SETUP: 'Most popular' highlight — move the .hot class and badge to another style any time. */
+.chips li.hot{background:var(--plum);border-color:var(--plum);color:#fff;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.chips li.hot .badge{background:var(--gold);color:var(--ink);border-radius:999px;padding:2px 8px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
 .note-line{display:flex;gap:11px;align-items:flex-start;margin:26px 0 0;background:var(--gold-tint);
   border:1px solid #efd9a0;border-radius:var(--r-sm);padding:14px 16px;font-size:15.5px;line-height:1.45}
 .note-line svg{width:20px;height:20px;flex:0 0 20px;margin-top:2px;fill:none;stroke:#7a5a06;stroke-width:2}
@@ -193,15 +196,18 @@ section.alt{background:var(--cream);border-top:1px solid var(--line);border-bott
 .gallery figure{margin:0;position:relative;min-width:0}
 .gallery .shot{gap:8px;padding:12px}
 .gallery .shot img{height:46px}
-/* Interim Instagram embeds: every post sits in an identical frame (same width and height),
-   so rows line up evenly whatever the post's own shape. 3-up on desktop, a swipeable row on
-   phones (the row scrolls, never the page). */
+/* Interim Instagram embeds, styled to match the site: each card shows only the post's photo or
+   video. Instagram's header, likes and comment bars are cropped out (the iframe is shifted up and
+   clipped), and our own label sits on a dark fade. Clicks still go through to the post. */
 .ig-embeds{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.ig-card{position:relative;aspect-ratio:5/8;overflow:hidden;background:var(--white);border:1px solid var(--line);border-radius:var(--r-sm)}
-.ig-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:44px;background:linear-gradient(rgba(255,255,255,0),var(--white));pointer-events:none}
-.ig-card .instagram-media,.ig-card iframe{margin:0!important;min-width:0!important;width:100%!important;max-width:100%!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.ig-card{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:var(--r);background:var(--plum-deep,#2a1340);box-shadow:0 8px 24px rgba(31,35,40,.12);isolation:isolate}
+.ig-card .instagram-media,.ig-card iframe{position:absolute!important;top:-54px!important;left:-2px!important;width:calc(100% + 4px)!important;height:calc(100% + 420px)!important;max-width:none!important;min-width:0!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important}
+.ig-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;z-index:1;pointer-events:none;background:linear-gradient(rgba(42,19,64,0) 0%,rgba(42,19,64,.88) 55%,#2a1340 82%)}
+.ig-tag{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;display:flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:14px;pointer-events:none}
+.ig-tag svg{width:18px;height:18px;flex:0 0 18px}
+.ig-tag .kind{margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 9px}
 @media (max-width:900px){.ig-embeds{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:8px}
-  .ig-card{flex:0 0 82%;scroll-snap-align:start}}
+  .ig-card{flex:0 0 72%;scroll-snap-align:start}}
 /* Real photos from the nightly Instagram sync (scripts/instagram_sync.py). */
 .gallery .shot.ig{padding:0;display:block}
 .gallery .shot.ig img{width:100%;height:100%;object-fit:cover;opacity:1;display:block}
@@ -419,11 +425,12 @@ footer .fine a{color:#fff}
         <div>
           <h3>Knotless</h3>
           <ul class="chips">
+            <li class="hot">Boho knotless <span class="badge">Most popular</span></li>
             <li>Small</li>
             <li>Medium</li>
             <li>Large</li>
             <li>Jumbo</li>
-            <li>Boho knotless</li>
+            
           </ul>
         </div>
         <div>
@@ -484,12 +491,12 @@ footer .fine a{color:#fff}
              (scripts/instagram_sync.py) replaces everything between these markers with
              fast photo tiles once IG_TOKEN is set up. -->
         <div class="ig-embeds">
-          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DemuhReMzRH/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/DemuhReMzRH/" rel="noopener">View this post on Instagram</a></blockquote></div>
-          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DehhTb3M9y5/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/DehhTb3M9y5/" rel="noopener">View this post on Instagram</a></blockquote></div>
-          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DehejJ7OQ0h/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DehejJ7OQ0h/" rel="noopener">View this post on Instagram</a></blockquote></div>
-          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/Dehasg0u5Xv/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/Dehasg0u5Xv/" rel="noopener">View this post on Instagram</a></blockquote></div>
-          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeaKXUysRq3/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeaKXUysRq3/" rel="noopener">View this post on Instagram</a></blockquote></div>
-          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeaEeWmMDty/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeaEeWmMDty/" rel="noopener">View this post on Instagram</a></blockquote></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DemuhReMzRH/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/DemuhReMzRH/" rel="noopener">View this post on Instagram</a></blockquote><span class="ig-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>View on Instagram<span class="kind">Reel</span></span></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DehhTb3M9y5/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/DehhTb3M9y5/" rel="noopener">View this post on Instagram</a></blockquote><span class="ig-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>View on Instagram<span class="kind">Reel</span></span></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DehejJ7OQ0h/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DehejJ7OQ0h/" rel="noopener">View this post on Instagram</a></blockquote><span class="ig-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>View on Instagram<span class="kind">Photo</span></span></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/Dehasg0u5Xv/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/reel/Dehasg0u5Xv/" rel="noopener">View this post on Instagram</a></blockquote><span class="ig-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>View on Instagram<span class="kind">Reel</span></span></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeaKXUysRq3/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeaKXUysRq3/" rel="noopener">View this post on Instagram</a></blockquote><span class="ig-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>View on Instagram<span class="kind">Photo</span></span></div>
+          <div class="ig-card"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DeaEeWmMDty/?utm_source=ig_embed" data-instgrm-version="14"><a href="https://www.instagram.com/p/DeaEeWmMDty/" rel="noopener">View this post on Instagram</a></blockquote><span class="ig-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>View on Instagram<span class="kind">Photo</span></span></div>
         </div>
         <!-- IG-FEED:END -->
       </div>
