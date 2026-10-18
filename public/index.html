@@ -166,6 +166,17 @@ nav.links a:hover{color:var(--plum)}
 section{padding:54px 0}
 section.alt{background:var(--cream);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .sec-head{margin-bottom:28px}
+/* Follow us */
+.follow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.follow{grid-template-columns:1fr}}
+.follow-card{display:flex;align-items:center;gap:14px;min-height:76px;padding:14px 18px;background:var(--white);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--ink);text-decoration:none;transition:border-color .15s,box-shadow .15s}
+.follow-card:hover{border-color:#9b79b8;box-shadow:var(--shadow)}
+.follow-card .fi{flex:0 0 46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--plum);color:var(--white)}
+.follow-card .fi svg{width:22px;height:22px}
+.follow-card .ft{display:flex;flex-direction:column;min-width:0}
+.follow-card .ft strong{font-size:17px}
+.follow-card .ft span{color:var(--muted);font-size:14px;overflow-wrap:anywhere}
+.follow-card .go{margin-left:auto;color:var(--plum);font-weight:700;font-size:20px}
 
 /* ---------- styles we do (no prices — Square owns those) ---------- */
 .style-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:26px 24px}
@@ -233,6 +244,7 @@ section.alt{background:var(--cream);border-top:1px solid var(--line);border-bott
 .quote>.shot,.quote>img{width:100%;border:0;border-bottom:1px solid var(--line);border-radius:0}
 .quote>img{aspect-ratio:4/5;height:auto;object-fit:cover}
 .qbody{display:flex;flex-direction:column;gap:12px;flex:1;padding:16px 18px 18px}
+.quote .stars{margin:0 0 8px;color:var(--gold-ink);font-size:18px;letter-spacing:2px;line-height:1}
 .quote blockquote{margin:0;font-size:16px;line-height:1.5}
 .quote blockquote p{margin:0}
 .who{margin:auto 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:5px;font-size:14.5px;color:var(--muted)}
@@ -566,6 +578,7 @@ footer .fine a{color:#fff}
         <figure class="quote">
           <img src="assets/reviews/suekwora.webp" alt="Suekwora L. with her finished braids" loading="lazy" decoding="async" width="480" height="600">
           <figcaption class="qbody">
+            <p class="stars" role="img" aria-label="Rated 5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
             <blockquote><p>&ldquo;Show a picture of the style you want and you will be matched with the braider who can get you right.&rdquo;</p></blockquote>
             <p class="who">
               <span class="nm">Suekwora L.</span>
@@ -577,6 +590,7 @@ footer .fine a{color:#fff}
         <figure class="quote">
           <img src="assets/reviews/alyasa.webp" alt="Alyasa B. with her finished braids" loading="lazy" decoding="async" width="480" height="600">
           <figcaption class="qbody">
+            <p class="stars" role="img" aria-label="Rated 5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
             <blockquote><p>&ldquo;Very comfortable very nice people been coming to this African braiding shop for over 20 years work is awesome and they always available even if it last min&rdquo;</p></blockquote>
             <p class="who">
               <span class="nm">Alyasa B.</span>
@@ -693,6 +707,35 @@ footer .fine a{color:#fff}
       <details><summary>Do you braid kids' hair?</summary><div class="body">Yes, for kids age 5 and up.</div></details>
       <details><summary>Can I walk in?</summary><div class="body">Yes, whenever a braider is free. Booking online guarantees your time.</div></details>
       <details><summary>How do I pay?</summary><div class="body">The deposit is paid by card online when you book, and it comes off your final price. You pay the rest in <strong>cash or Zelle</strong> at the salon. We don't take cards at the salon.</div></details>
+    </div>
+  </section>
+
+  <section id="follow" class="alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Follow us</p>
+        <h2 class="sec">See new styles every week</h2>
+        <div class="rule"></div>
+        <p class="sub">Fresh braids from our chairs, videos, and same-day openings. Follow along, and tag us when you show off your style.</p>
+      </div>
+      <div class="follow">
+        <a class="follow-card" href="https://www.instagram.com/fatouafricanhairbraiding/" rel="noopener">
+          <span class="fi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></span>
+          <span class="ft"><strong>Instagram</strong><span>@fatouafricanhairbraiding</span></span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+        <a class="follow-card" href="https://www.tiktok.com/@fatou.hair.braids8" rel="noopener">
+          <span class="fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.2 1.8 3.7 4 3.9v3.2c-1.5 0-2.8-.4-4-1.2v6.3c0 3.4-2.7 5.8-5.9 5.8-3.2 0-5.7-2.5-5.7-5.6 0-3.4 3-6 6.5-5.5v3.3c-1.6-.4-3.2.7-3.2 2.3 0 1.3 1 2.3 2.4 2.3 1.4 0 2.5-1 2.5-2.7V3h3.4z"/></svg></span>
+          <span class="ft"><strong>TikTok</strong><span>@fatou.hair.braids8</span></span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+        <a class="follow-card" href="https://maps.google.com/?cid=3611925491046211763" rel="noopener">
+          <span class="fi"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6a2.5 2.5 0 010 5.5z"/></svg></span>
+          <span class="ft"><strong>Google</strong><span>Reviews, photos and directions</span></span>
+          <span class="go" aria-hidden="true">→</span>
+        </a>
+        <!-- SETUP: add a Facebook card here once the Page exists (same markup, link to the Page). -->
+      </div>
     </div>
   </section>
 </main>
