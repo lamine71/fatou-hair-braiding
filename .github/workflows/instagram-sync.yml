@@ -1,5 +1,5 @@
 # Nightly: pull the latest Instagram posts into the website gallery.
-# Setup steps for the owner: setup/instagram-sync.md
+# Setup steps for the owner: docs/instagram-sync.md
 name: Instagram sync
 
 on:
@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write            # to commit the refreshed gallery
+  actions: write             # to start the "Publish website" workflow after a change
 
 concurrency:
   group: instagram-sync
@@ -24,7 +25,7 @@ jobs:
     steps:
       - name: Not set up yet
         if: env.HAS_TOKEN != 'true'
-        run: echo "::notice::Add the IG_TOKEN secret to turn on the Instagram sync (see setup/instagram-sync.md)."
+        run: echo "::notice::Add the IG_TOKEN secret to turn on the Instagram sync (see docs/instagram-sync.md)."
 
       - uses: actions/checkout@v4
         if: env.HAS_TOKEN == 'true'
@@ -45,6 +46,7 @@ jobs:
         run: python3 scripts/instagram_sync.py --refresh
 
       - name: Commit if the gallery changed
+        id: commit
         if: env.HAS_TOKEN == 'true'
         run: |
           git config user.name "instagram-sync[bot]"
@@ -55,7 +57,16 @@ jobs:
           else
             git commit -m "Instagram sync: latest posts"
             git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # Pushes made with the workflow's own token don't start other workflows, so start the
+      # website publish explicitly (manually dispatched runs are allowed to start).
+      - name: Publish the updated website
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref "$GITHUB_REF_NAME"
 
       - name: Save the refreshed token (keeps the sync running without manual renewals)
         if: env.HAS_TOKEN == 'true' && env.HAS_PAT == 'true'
@@ -72,4 +83,4 @@ jobs:
         if: env.HAS_TOKEN == 'true' && env.HAS_PAT != 'true'
         run: |
           rm -f "$RUNNER_TEMP/ig_new_token"
-          echo "::notice::Without the optional SECRETS_PAT secret, paste a fresh IG_TOKEN about every 50 days (see setup/instagram-sync.md)."
+          echo "::notice::Without the optional SECRETS_PAT secret, paste a fresh IG_TOKEN about every 50 days (see docs/instagram-sync.md)."
