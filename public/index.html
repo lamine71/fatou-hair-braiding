@@ -65,7 +65,8 @@
   h2.sec { font-size: clamp(26px, 3.4vw, 34px); margin: 0 0 8px; letter-spacing: -.3px; }
   .sub { color: var(--muted); margin: 0 0 28px; }
 
-  .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .price-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 760px) { .price-grid { grid-template-columns: 1fr; } }
   .price-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
   .price-card h3 { margin: 0 0 10px; font-size: 19px; color: var(--plum); }
   .price-card table { width: 100%; border-collapse: collapse; font-size: 16px; }
@@ -76,7 +77,8 @@
   /* SETUP: .ph highlights placeholder text. Remove the class once the real value is in. */
   .ph { background: #fff3c4; border-radius: 4px; padding: 0 4px; }
 
-  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 760px) { .gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
   .gallery figure { margin: 0; aspect-ratio: 4 / 5; border-radius: var(--radius); overflow: hidden; position: relative; background: repeating-linear-gradient(135deg, #efe6f6 0 14px, #f7f1fb 14px 28px); border: 1px solid var(--line); }
   .gallery figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .gallery figcaption { position: absolute; left: 10px; bottom: 10px; background: rgba(255,255,255,.92); padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }
