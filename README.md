@@ -2,8 +2,8 @@
 
 The website for **Fatou Hair Braiding**, an African hair-braiding salon at 7124 S Jeffery Blvd on Chicago's South Side.
 
-- **Live preview:** https://www.fatouhairbraidingchicago.com/
-- Hosted free on GitHub Pages at the custom domain **www.fatouhairbraidingchicago.com** (the plain address and the old github.io link forward there). Every change pushed to the `site` branch republishes it automatically.
+- **Live preview:** https://fatouhairbraidingchicago.com/
+- Hosted free on GitHub Pages at the custom domain **fatouhairbraidingchicago.com** (www and the old github.io link forward there). Every change pushed to the `site` branch republishes it automatically.
 
 ## What's here
 | Path | What it is |
@@ -24,4 +24,4 @@ Open `public/index.html` in a browser to preview; no server is needed. Search fo
 The site currently tells search engines **not to index it**, because it's a draft. At launch:
 1. Remove the `noindex` meta tag in `public/index.html`.
 2. Remove the `Disallow` line in `public/robots.txt`.
-3. ~~Point the custom domain at GitHub Pages~~ (done: https://www.fatouhairbraidingchicago.com)
+3. ~~Point the custom domain at GitHub Pages~~ (done: https://fatouhairbraidingchicago.com)
