@@ -16,7 +16,7 @@ The website for **Fatou Hair Braiding**, an African hair-braiding salon at 7124 
 
 ## Editing
 Open `public/index.html` in a browser to preview; no server is needed. Search for `SETUP:` comments to find the things still to fill in. The main ones are:
-- **Square booking link:** replace `https://SQUARE-BOOKING-LINK.invalid` on every Book button.
+- **Styles list:** the chips in the "Styles we do" section should match the services in Square Appointments. When a service is added, renamed or retired in Square, update the chips to match.
 - **Photos:** the gallery fills itself once the Instagram sync is set up.
 - **Ad tracking IDs:** the `CONFIG` block at the bottom of `index.html`. Nothing third-party loads while it's blank.
 
